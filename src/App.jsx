@@ -11,10 +11,17 @@ import Dependencies from './components/Dependencies';
 import ChangesThisWeek from './components/ChangesThisWeek';
 import Actions from './components/Actions';
 import { DEMO_DATA } from './utils/demoData';
+import weeklyData from './data/weeklyData.json';
 import './App.css';
 
 const STORAGE_KEY = 'uox_dashboard_v1';
-const PREV_KEY = 'uox_prev_summary_v1';
+const PREV_KEY    = 'uox_prev_summary_v1';
+const FALLBACK_KEY = 'uox_dashboard_fallback';
+
+function hasApiKey() {
+  const k = import.meta.env.VITE_ANTHROPIC_API_KEY;
+  return k && k !== 'PASTE_KEY_HERE';
+}
 
 function RagDot({ rag }) {
   return <span className={`rag-dot rag-dot--${rag}`} aria-label={rag} />;
@@ -54,15 +61,42 @@ function EmptyState({ onUpload, onDemo }) {
   );
 }
 
+function FallbackBanner({ onUpload }) {
+  return (
+    <div className="fallback-banner" role="status">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true" style={{ flexShrink: 0 }}>
+        <circle cx="7" cy="7" r="6" stroke="#92620a" strokeWidth="1.5"/>
+        <path d="M7 4v3.5M7 9.5v.5" stroke="#92620a" strokeWidth="1.5" strokeLinecap="round"/>
+      </svg>
+      <span className="fallback-text">Showing static data — upload files to refresh</span>
+      <button className="fallback-upload-btn" onClick={onUpload}>Upload Files</button>
+    </div>
+  );
+}
+
 export default function App() {
   const [data, setData] = useState(null);
+  const [isFallback, setIsFallback] = useState(false);
   const [panelOpen, setPanelOpen] = useState(false);
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) setData(JSON.parse(saved));
+      if (saved) {
+        setData(JSON.parse(saved));
+        setIsFallback(!!localStorage.getItem(FALLBACK_KEY));
+        return;
+      }
     } catch {}
+
+    if (!hasApiKey()) {
+      setData(weeklyData);
+      setIsFallback(true);
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(weeklyData));
+        localStorage.setItem(FALLBACK_KEY, '1');
+      } catch {}
+    }
   }, []);
 
   const handleNewData = newData => {
@@ -77,7 +111,11 @@ export default function App() {
       try { localStorage.setItem(PREV_KEY, prev); } catch {}
     }
     setData(newData);
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(newData)); } catch {}
+    setIsFallback(false);
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newData));
+      localStorage.removeItem(FALLBACK_KEY);
+    } catch {}
     setPanelOpen(false);
   };
 
@@ -110,6 +148,7 @@ export default function App() {
       {data ? (
         <>
           <NavTabs />
+          {isFallback && <FallbackBanner onUpload={() => setPanelOpen(true)} />}
           <main className="dash-body" id="dashboard-content">
             <Scorecards items={data.scorecards} />
 

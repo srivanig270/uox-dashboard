@@ -378,6 +378,37 @@ table { border-collapse: collapse; width: 100%; }
 .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
 .btn-primary--lg { padding: 12px 28px; font-size: 0.82rem; }
 
+/* ─── Fallback banner ─── */
+.fallback-banner {
+  background: #fef3cd;
+  border-bottom: 1px solid #f0c060;
+  padding: 9px 28px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: #6b4a07;
+  letter-spacing: 0.02em;
+}
+.fallback-text { flex: 1; }
+.fallback-upload-btn {
+  padding: 5px 14px;
+  background: #c97b0a;
+  color: #fff;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: background 0.15s;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+.fallback-upload-btn:hover { background: #a86209; }
+@media print { .fallback-banner { display: none !important; } }
+
 .btn-demo {
   padding: 9px 16px;
   color: rgba(255,255,255,0.55);
