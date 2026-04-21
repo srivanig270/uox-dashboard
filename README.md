@@ -14,21 +14,9 @@ npm start
 # → http://localhost:3000
 ```
 
-The dashboard opens immediately with static data from `src/data/weeklyData.json`. No API key is required to view it.
+The dashboard opens immediately with static data from `src/data/weeklyData.json`. No API key is required to view it (yet).
 
----
 
-## Configuration
-
-Copy `.env` and add your Anthropic API key to enable live document analysis:
-
-```
-VITE_ANTHROPIC_API_KEY=sk-ant-...
-```
-
-With a key present, the **Update This Week** button in the header opens the upload panel where you can drop in fresh program documents and regenerate the dashboard.
-
----
 
 ## How It Works
 
@@ -47,14 +35,6 @@ The app detects whether `VITE_ANTHROPIC_API_KEY` is set on load. If it is missin
 
 Previous week data is also saved to `localStorage` and passed to Claude on the next upload, enabling accurate week-over-week change detection in section 08.
 
-### File extraction
-
-| Format | Method |
-|--------|--------|
-| `.pptx` | JSZip unpacks the Office Open XML archive; text runs are extracted from `ppt/slides/slide*.xml` using `<a:t>` element matching |
-| `.xlsx` | JSZip unpacks the archive; shared strings are resolved from `xl/sharedStrings.xml`, then cell values are read row by row from each worksheet |
-
----
 
 ## Dashboard Sections
 
