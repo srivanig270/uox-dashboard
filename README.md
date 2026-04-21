@@ -20,11 +20,7 @@ The dashboard opens immediately with static data from `src/data/weeklyData.json`
 
 ## How It Works
 
-### Fallback mode (no API key)
-
-The app detects whether `VITE_ANTHROPIC_API_KEY` is set on load. If it is missing or still set to `PASTE_KEY_HERE`, the dashboard skips the upload screen entirely and loads directly from `src/data/weeklyData.json`. A yellow banner at the top of the dashboard indicates static data is being shown. Replacing the JSON file or adding an API key removes the banner.
-
-### Live mode (API key present)
+### Live mode (API key present, still not yet)
 
 1. Click **Update This Week** in the header
 2. Drop in one or more of the four accepted document types
