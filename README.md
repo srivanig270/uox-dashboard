@@ -1,6 +1,6 @@
 # UOX Program — Executive Risk Dashboard
 
-An executive-facing risk dashboard for the **UOX Program (Utilities Operations eXperience)**, a multi-year utility transformation program at WGL/SEMCO managed by PwC.
+An executive-facing risk dashboard for the **UOX Program (Utilities Operations eXperience)**, a multi-year utility transformation program at WGL managed by PwC.
 
 The dashboard ingests weekly program documents (PPTX status decks, XLSX trackers), sends extracted content to the Claude AI API for analysis, and renders a fully structured risk view — persisted in the browser so it survives page refresh.
 
